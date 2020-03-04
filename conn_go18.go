@@ -122,6 +122,13 @@ func (cn *conn) cancel(ctx context.Context) error {
 	}
 	defer c.Close()
 
+	if deadline, ok := ctx.Deadline(); ok {
+		err = c.SetDeadline(deadline)
+		if err != nil {
+			return err
+		}
+	}
+
 	{
 		can := conn{
 			c: c,
